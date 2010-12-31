@@ -1,0 +1,263 @@
+<#import "corelayout.ftl.html" as layout><html>
+<@layout.head "Job Records">
+<style type="text/css" title="currentStyle">
+@import "${baseurl!}htdocs/jquery-datatables/css/demo_page.css";
+
+@import "${baseurl!}htdocs/jquery-datatables/css/demo_table.css";
+
+/* css for timepicker */
+#ui-timepicker-div dl{ text-align: left; }
+#ui-timepicker-div dl dt{ height: 25px; }
+#ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }
+
+#message {
+    font-family: Arial,Helvetica,sans-serif;
+    position: fixed;
+    top :0px;
+    left: 0px;
+    width: 100%;
+    z-index: 105;
+    text-align: center;
+    font-weight: bold;
+    font-size: 100%;
+    color: white;
+    padding: 10px 0px 10px 0px;
+    background-color: #8A0808;
+}
+
+#message a {
+    color: white;
+}
+
+#message span {
+    text-align: center;
+    width: 95%;
+    float:left;
+}
+
+.close-message {
+    white-space: nowrap;
+    float: right;
+    margin-right: 10px;
+    color: #FFFFFF;
+    text-decoration: none;
+    border: 2px #FFFFFF solid;
+    padding-left: 3px;
+    padding-right: 3px
+}
+
+.close-message a {
+    color: #FFFFFF;
+}
+</style>
+<script type="text/javascript"
+	src="${baseurl!}htdocs/jobrecord/jquery-ui-timepicker-addon-0.5.js">/**/</script>
+<script type="text/javascript"
+	src="${baseurl!}htdocs/jquery-datatables/js/jquery.dataTables.min.js">/**/</script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#example').dataTable( {
+		"bProcessing": true,
+		"bServerSide": true,
+		"bFilter": false,
+		"sAjaxSource": 'items',
+		"fnServerData": function (sSource, aoData, fnCallback) {
+			$.ajax( {
+				"dataType": 'json', 
+				"type": "GET", 
+				"url": sSource, 
+				"data": aoData, 
+				"success": function(json) {
+				   rows = json['aaData'];
+				   for (var i in rows) {
+					   rows[i][0] = "<a href=\"items/"+rows[i][0]+"\">"+rows[i][0]+"</a>";
+				   }
+				   fnCallback(json);
+			    }
+			} );
+		}
+	} );
+
+	<#if new_record_uri??>
+	$("#message").fadeIn("slow");
+    $("#message a.close-message").click(function() {
+        $("#message").fadeOut("slow");
+        return false;
+    });
+	</#if>
+
+	$('#newrec_jobstarttime').datetimepicker({
+		dateFormat: "d M yy",
+		timeFormat: 'hh:mm'
+	});
+	$('#newrec_jobcreationtime').datetimepicker({
+		dateFormat: "d M yy",
+		timeFormat: 'hh:mm'
+	});
+	$('#newrec_jobendtime').datetimepicker({
+		dateFormat: "d M yy",
+		timeFormat: 'hh:mm'
+	});
+
+	$('#search_jobstarttime_from').datetimepicker({
+		dateFormat: "d M yy",
+		timeFormat: 'hh:mm'
+	});
+	$('#search_jobcreationtime_from').datetimepicker({
+		dateFormat: "d M yy",
+		timeFormat: 'hh:mm'
+	});
+	$('#search_jobendtime_from').datetimepicker({
+		dateFormat: "d M yy",
+		timeFormat: 'hh:mm'
+	});
+	$('#search_jobstarttime_to').datetimepicker({
+		dateFormat: "d M yy",
+		timeFormat: 'hh:mm'
+	});
+	$('#search_jobcreationtime_to').datetimepicker({
+		dateFormat: "d M yy",
+		timeFormat: 'hh:mm'
+	});
+	$('#search_jobendtime_to').datetimepicker({
+		dateFormat: "d M yy",
+		timeFormat: 'hh:mm'
+	});
+
+	$("#create-record").click(function () {
+		var newrec_jobstarttime = $('#newrec_jobstarttime').val();
+		var newrec_jobcreationtime = $('#newrec_jobcreationtime').val();
+		var newrec_jobendtime = $('#newrec_jobendtime').val();
+		$.ajax({
+			url: window.location.href,
+			type: "POST",
+			data: { 'newrec_jobstarttime': newrec_jobstarttime,
+			        'newrec_jobcreationtime': newrec_jobcreationtime,
+			        'newrec_jobendtime': newrec_jobendtime,
+			        'form_submit': "create-record"
+			      },       
+			cache: false,
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('Accept','application/json');
+			},
+			success: function (data, textstatus, xhr) {
+				var contenttype = xhr.getResponseHeader('Content-Type');
+				var contenttypearr = contenttype.split(';');
+				if (contenttypearr[0] == 'application/json') {
+					$("#message span").html("A new record was created at:<br /><a href='"
+							+ data.new_record_uri + "'>" + data.new_record_uri + "</a>");
+					$("#message").fadeIn("slow");
+				    $("#message a.close-notify").click(function() {
+				        $("#message").fadeOut("slow");
+				        return false;
+				    });
+				} else {
+					alert('Content-Type of response not understood');
+				}
+            }
+        });
+        return false;
+	});
+} );
+</script>
+</@layout.head>
+<@layout.body>
+<div id="message" style="display: none;">
+    <span id="message-content">
+	<#if new_record_uri??>A new record was created at<br /><a href='${new_record_uri!}'>${new_record_uri?html!""}</a>.</#if>
+	</span>
+    <a href="#" class="close-message">X</a>
+</div>
+<h1>Job Records</h1>
+<table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Owner</th>
+			<th>Creation Time</th>
+			<th>Start Time</th>
+			<th>End Time</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th>ID</th>
+			<th>Owner</th>
+			<th>Creation Time</th>
+			<th>Start Time</th>
+			<th>End Time</th>
+		</tr>
+	</tfoot>
+</table>
+<br />
+<br />
+<br />
+<div class="ui-widget">
+<div class="ui-widget-header">Search job records</div>
+<form method="post" class="ui-widget-content">
+<input type="hidden" name="form_submit" value="create-search" />
+<table>
+	<tr>
+		<th style="text-align: right;">Owner: </th>
+		<td><input type="text" name="owner" id="searchrec_owner" />
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th style="text-align: right;">Creation Time (from): </th>
+		<td><input type="text" name="jobcreationtime_from" id="search_jobcreationtime_from" />
+		<td>&nbsp;</td>
+		<th style="text-align: right;">Creation Time (to): </th>
+		<td><input type="text" name="jobcreationtime_to" id="search_jobcreationtime_to" />
+	</tr>
+	<tr>
+		<th style="text-align: right;">Start Time (from): </th>
+		<td><input type="text" name="jobstarttime_from" id="search_jobstarttime_from" />
+		<td>&nbsp;</td>
+		<th style="text-align: right;">Start Time (to): </th>
+		<td><input type="text" name="jobstarttime_to" id="search_jobstarttime_to" />
+	</tr>
+	<tr>
+		<th style="text-align: right;">End Time (from): </th>
+		<td><input type="text" name="jobendtime_after" id="search_jobendtime_from" />
+		<td>&nbsp;</td>
+		<th style="text-align: right;">End Time (to): </th>
+		<td><input type="text" name="jobendtime_to" id="search_jobendtime_to" />
+	</tr>
+	<tr>
+		<td colspan="2"><input type="submit" id="create-search" value="Search file records" class="ui-state-default ui-corner-all" /></td>
+	</tr>
+</table>
+</form></div>
+<br />
+<br />
+<div class="ui-widget">
+<div class="ui-widget-header">Create a new job record</div>
+<form method="post" class="ui-widget-content">
+<input type="hidden" name="form_submit" value="create-record" />
+<table>
+	<tr>
+		<th style="text-align: right;">Creation Time: </th>
+		<td><input type="text" name="newrec_jobcreationtime" id="newrec_jobcreationtime" />
+	</tr>
+	<tr>
+		<th style="text-align: right;">Start Time: </th>
+		<td><input type="text" name="newrec_jobstarttime" id="newrec_jobstarttime" />
+	</tr>
+	<tr>
+		<th style="text-align: right;">End Time: </th>
+		<td><input type="text" name="newrec_jobendtime" id="newrec_jobendtime" />
+	</tr>
+	<tr>
+		<td colspan="2"><input type="button" id="create-record" value="Create job record" class="ui-state-default ui-corner-all" /></td>
+	</tr>
+</table>
+</form></div>
+<br /><br /><br />
+<br /><br /><br />
+<br /><br /><br />
+</@layout.body>
+</html>

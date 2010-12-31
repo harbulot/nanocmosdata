@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Record xmlns="http://www.rcs.manchester.ac.uk/research/nanocmos/2008/01/datamanagement/hypermedia">
+  <JobCoreData>
+    <#if record.owner??><owner>${record.owner?xml!""}</owner></#if>
+    <#if record.jobCreationTime??><jobCreationTime>${record.jobCreationTime?datetime!""}</jobCreationTime></#if>
+	<#if record.jobStartTime??><jobStartTime>${record.jobStartTime?datetime!""}</jobStartTime></#if>
+	<#if record.jobEndTime??><jobEndTime>${record.jobEndTime?datetime!""}</jobEndTime></#if>
+    <#if record.parentJobRecord??><parentJob>${record.parentJobRecord?xml!""}</parentJob></#if>
+    <#if record.childJobRecords??>
+    <#list record.childJobRecords as childrecord><childJob>${childrecord.id?xml!""}</childJob></#list>
+    </#if>
+    <#if record.childFileRecords??>
+    <#list record.childFileRecords as childrecord><filerecord>${childrecord.id?xml!""}</filerecord></#list>
+    </#if>
+  </JobCoreData>
+  <Metadata>
+  <#if annotations??>
+    <#list annotations as annotation><Annotation href="metadata/${annotation.id}"/>
+    </#list>
+  </#if>
+  </Metadata>
+</Record>

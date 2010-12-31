@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+	<!--
+		/** * Copyright 2007-2009, The University of Manchester, UK. * * This
+		software is produced for use by the * <a
+		href="http://www.nanocmos.ac.uk/">NanoCMOS</a> project. * */
+	-->
+<hibernate-mapping>
+	<!-- 
+	   File records
+	 -->
+	<class
+		name="uk.ac.nanocmos.datamanagement.service.records.storage.FileRecord"
+		table="FILE_RECORDS">
+		<id name="id" type="string" column="ID" length="1024" />
+		<property name="creationTime" type="timestamp">
+			<column name="CreationTime" default="current_timestamp" />
+		</property>
+		<property name="modificationTime" type="timestamp">
+			<column name="ModificationTime" default="null" />
+		</property>
+		<property name="owner" type="text" column="CoreDataOwner"
+			not-null="false" />
+
+		<property name="type" type="text" column="CoreDataType"
+			not-null="false" />
+		<property name="location" type="text" column="CoreDataLocation"
+			not-null="false" />
+
+		<property name="parentJobRecord" type="text" column="ParentJobRecord"
+			not-null="false" />
+
+		<list name="annotations" lazy="true" cascade="all,delete-orphan">
+			<key column="ContainerID" not-null="true" />
+			<list-index column="AnnotationsIndex" />
+			<one-to-many
+				class="uk.ac.nanocmos.datamanagement.service.records.storage.FileRecordAnnotation" />
+		</list>
+	</class>
+
+	<class
+		name="uk.ac.nanocmos.datamanagement.service.records.storage.FileRecordAnnotation"
+		table="FILE_RECORD_ANNOTATIONS">
+		<subselect>SELECT ID, ContainerID, AnnotationsIndex, CreationTime,
+			ModificationTime, ContentType, f.XmlContent.getClobVal() as
+			XmlContent,
+			TextContent, BinaryContent, LinkUri FROM
+			FILE_RECORD_ANNOTATIONS f</subselect>
+
+		<id name="id" type="java.lang.Long" column="ID">
+			<generator class="increment" />
+		</id>
+		<many-to-one name="fileRecord"
+			class="uk.ac.nanocmos.datamanagement.service.records.storage.FileRecord"
+			column="ContainerID" not-null="true" insert="false" update="false" />
+		<property name="creationTime" type="timestamp">
+			<column name="CreationTime" default="current_timestamp" />
+		</property>
+		<property name="modificationTime" type="timestamp">
+			<column name="ModificationTime" default="null" />
+		</property>
+		<property name="contentType" column="ContentType" type="string"
+			not-null="false" />
+		<property name="xmlContent" type="text" not-null="false">
+			<column name="XmlContent" sql-type="XmlType" />
+		</property>
+		<property name="textContent" column="TextContent" type="text"
+			not-null="false" />
+		<property name="binaryContent" column="BinaryContent" type="binary"
+			not-null="false" />
+		<property name="link" column="LinkUri" type="text" not-null="false" />
+	</class>
+	<!-- 
+	   End of file records
+	 -->
+
+	<!--
+		Job records 
+	 -->
+	<class
+		name="uk.ac.nanocmos.datamanagement.service.records.storage.JobRecord"
+		table="JOB_RECORDS">
+		<id name="id" type="string" column="ID" length="1024" />
+		<property name="creationTime" type="timestamp">
+			<column name="CreationTime" default="current_timestamp" />
+		</property>
+		<property name="modificationTime" type="timestamp">
+			<column name="ModificationTime" default="null" />
+		</property>
+		<property name="owner" type="text" column="CoreDataOwner"
+			not-null="false" />
+
+		<property name="jobCreationTime" type="timestamp">
+			<column name="CoreDataJobCreationTime" default="null" />
+		</property>
+		<property name="jobStartTime" type="timestamp">
+			<column name="CoreDataJobStartTime" default="null" />
+		</property>
+		<property name="jobEndTime" type="timestamp">
+			<column name="CoreDataJobEndTime" default="null" />
+		</property>
+
+		<property name="parentJobRecord" type="text" column="ParentJobRecord"
+			not-null="false" />
+		<list name="childJobRecords" lazy="true" cascade="all, delete-orphan">
+			<key column="ParentJobRecord" not-null="true" />
+			<list-index column="ChildJobRecordIndex" />
+			<one-to-many
+				class="uk.ac.nanocmos.datamanagement.service.records.storage.JobRecordChildJob" />
+		</list>
+
+		<list name="childFileRecords" lazy="true" cascade="all,delete-orphan">
+			<key column="ParentJobRecord" not-null="true" />
+			<list-index column="ChildFileRecordIndex" />
+			<one-to-many
+				class="uk.ac.nanocmos.datamanagement.service.records.storage.JobRecordChildFileRec" />
+		</list>
+
+		<list name="annotations" lazy="true" cascade="all,delete-orphan">
+			<key column="ContainerID" not-null="true" />
+			<list-index column="AnnotationsIndex" />
+			<one-to-many
+				class="uk.ac.nanocmos.datamanagement.service.records.storage.JobRecordAnnotation" />
+		</list>
+	</class>
+
+	<class
+		name="uk.ac.nanocmos.datamanagement.service.records.storage.JobRecordChildJob"
+		table="JOB_RECORD_CHILDJOBLINK">
+		<id name="id" type="java.lang.Long" column="ID">
+			<generator class="increment" />
+		</id>
+		<property name="uri" type="string" column="Uri" />
+	</class>
+
+	<class
+		name="uk.ac.nanocmos.datamanagement.service.records.storage.JobRecordChildFileRec"
+		table="JOB_RECORD_CHILDFRECLINK">
+		<id name="id" type="java.lang.Long" column="ID">
+			<generator class="increment" />
+		</id>
+		<property name="uri" type="string" column="Uri" />
+	</class>
+
+	<class
+		name="uk.ac.nanocmos.datamanagement.service.records.storage.JobRecordAnnotation"
+		table="JOB_RECORD_ANNOTATIONS">
+		<subselect>SELECT ID, ContainerID, AnnotationsIndex, CreationTime,
+			ModificationTime, ContentType, f.XmlContent.getClobVal() as
+			XmlContent,
+			TextContent, BinaryContent, LinkUri FROM
+			JOB_RECORD_ANNOTATIONS f</subselect>
+
+		<id name="id" type="java.lang.Long" column="ID">
+			<generator class="increment" />
+		</id>
+		<many-to-one name="jobRecord"
+			class="uk.ac.nanocmos.datamanagement.service.records.storage.JobRecord"
+			column="ContainerID" not-null="true" insert="false" update="false" />
+		<property name="creationTime" type="timestamp">
+			<column name="CreationTime" default="current_timestamp" />
+		</property>
+		<property name="modificationTime" type="timestamp">
+			<column name="ModificationTime" default="null" />
+		</property>
+		<property name="contentType" column="ContentType" type="string" />
+		<property name="xmlContent" type="text" not-null="false">
+			<column name="XmlContent" sql-type="XmlType" />
+		</property>
+		<property name="textContent" column="TextContent" type="text"
+			not-null="false" />
+		<property name="binaryContent" column="BinaryContent" type="binary"
+			not-null="false" />
+		<property name="link" column="LinkUri" type="text" not-null="false" />
+	</class>
+	<!--
+		End of job records
+	 -->
+
+	<!-- 
+	   Users
+	 -->
+	<class name="uk.ac.nanocmos.datamanagement.service.records.storage.User"
+		table="USERS">
+		<id name="id" type="string" column="ID" length="512" />
+
+		<property name="name" type="text" column="Name" not-null="false" />
+		<property name="x500Principal" type="text" column="X500Principal"
+			not-null="false" />
+		<property name="kerberosPrincipal" type="text" column="KerberosPrincipal"
+			not-null="false" />
+	</class>
+	<!-- 
+	   End of users
+	 -->
+
+	<!-- 
+	   Searches
+	 -->
+	<class name="uk.ac.nanocmos.datamanagement.service.records.storage.Search"
+		table="SEARCHES">
+		<id name="id" type="string" column="ID" length="512" />
+
+		<property name="queryFormat" type="text" column="QueryFormat"
+			not-null="true" />
+		<property name="queryContent" type="text" column="QueryContent"
+			length="4096" not-null="true" />
+	</class>
+	<!-- 
+	   End of searches
+	 -->
+
+	<!--
+		Views to read the XmlType back from Oracle. 
+	 -->
+	<database-object>
+		<create>create or replace view FILE_RECORD_XML_ANNOTATIONS_V as
+			(
+			SELECT ID, ContainerID, CreationTime,
+			ModificationTime, ContentType,
+			f.XmlContent.getClobVal() as
+			XmlContent,
+			TextContent, BinaryContent,
+			LinkUri FROM
+			FILE_RECORD_ANNOTATIONS f)</create>
+		<drop>drop view FILE_RECORD_XML_ANNOTATIONS_V</drop>
+		<dialect-scope name="org.hibernate.dialect.Oracle10gDialect" />
+	</database-object>
+	<database-object>
+		<create>create or replace view JOB_RECORD_XML_ANNOTATIONS_V as (
+			SELECT ID, ContainerID, CreationTime,
+			ModificationTime, ContentType,
+			f.XmlContent.getClobVal() as
+			XmlContent,
+			TextContent, BinaryContent,
+			LinkUri FROM
+			JOB_RECORD_ANNOTATIONS f)</create>
+		<drop>drop view JOB_RECORD_XML_ANNOTATIONS_V</drop>
+		<dialect-scope name="org.hibernate.dialect.Oracle10gDialect" />
+	</database-object>
+	<!--
+    	End of views to read the XmlType back from Oracle. 
+     -->
+</hibernate-mapping>

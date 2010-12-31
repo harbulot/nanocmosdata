@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Record xmlns="http://www.rcs.manchester.ac.uk/research/nanocmos/2008/01/datamanagement/hypermedia">
+  <FileRecordCoreData>
+    <#if record.owner??><owner>${record.owner?xml!""}</owner></#if>
+    <#if record.location??><location>${record.location?xml!""}</location></#if>
+    <#if record.type??><type>${record.type?xml!""}</type></#if>
+    <#if record.parentJobRecord??><parentJob>${record.parentJobRecord?xml!""}</</parentJob></#if>
+  </FileRecordCoreData>
+  <Metadata>
+  <#if annotations??>
+    <#list annotations as annotation><Annotation href="metadata/${annotation.id}"/>
+    </#list>
+  </#if>
+  </Metadata>
+</Record>

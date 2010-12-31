@@ -1,0 +1,67 @@
+<#import "corelayout.ftl.html" as layout><html>
+<@layout.head "File Record">
+<script type="text/javascript" src="${baseurl!}htdocs/filerecord/jquery.xslt.js">/**/</script>
+<link rel="stylesheet" type="text/css" href="${baseurl!}htdocs/filerecord/xmlverbatim.css" />
+<style type="text/css">
+    .annotation_link img {
+        border-style: none;
+     }
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(function() {
+		$("#annotation_dialog").hide();
+		$("#annotation_dialog").dialog({ autoOpen: false, bgiframe: true, width: 'auto' });
+	});
+	$(".annotation_link").click(function() {
+		$("#annotation_dialog").html("<img src=\"${baseurl!}htdocs/filerecord/ajax-loader.gif\" alt=\"Loading...\" />");
+		$("#annotation_dialog").xslt($(this).attr("href"), "${baseurl!}htdocs/filerecord/xmlverbatim.xsl",
+				function() {
+					$("#annotation_dialog").dialog('option', 'position', 'center');
+				});
+		$("#annotation_dialog").dialog('open');
+		return false;
+	});
+});
+</script>
+</@layout.head>
+<@layout.body>
+<h1>File Record: <#if record.id??>${record.id?html}</#if></h1>
+<form>
+<table>
+	<tr>
+		<td class="leftlabel">Owner:</td>
+		<td><#if record.owner??>${record.owner?html!""}</#if></td>
+	</tr>
+	<tr>
+		<td class="leftlabel">Location:</td>
+		<td><#if record.location??>${record.location?html!""}</#if></td>
+	</tr>
+	<tr>
+		<td class="leftlabel">Type:</td>
+		<td><#if record.type??>${record.type?html!""}</#if></td>
+	</tr>
+	<tr>
+		<td class="leftlabel">Parent job record:</td>
+		<td><#if record.parentJobRecord??>${record.parentJobRecord?html!""}</#if></td>
+	</tr>
+	<tr>
+		<td class="leftlabel">Annotations:</td>
+		<td><#if record.annotations??>
+		<ul>
+			<table>
+			<#list record.annotations as annotation>
+			<tr><td><a href="metadata/${annotation.id}" id="annotation_preview_${annotation.id}" class="annotation_link">
+				    <img src="${baseurl!}htdocs/filerecord/magnifier.png" alt="Preview" /></a></td>
+				<td><a href="metadata/${annotation.id}">metadata/${annotation.id?html}</a></td>
+				</tr>
+			</#list>
+			</table>
+		</ul></#if>
+		</td>
+	</tr>
+	<div id="annotation_dialog" title="Annotation"></div>
+</table>
+</form>
+</@layout.body>
+</html>

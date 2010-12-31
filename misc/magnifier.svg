@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg5733"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="magnifier.svg">
+  <defs
+     id="defs5735">
+    <linearGradient
+       id="linearGradient6281">
+      <stop
+         style="stop-color:#f0f0f0;stop-opacity:1;"
+         offset="0"
+         id="stop6283" />
+      <stop
+         id="stop6289"
+         offset="0.75432628"
+         style="stop-color:#7f7f7f;stop-opacity:1;" />
+      <stop
+         style="stop-color:#373737;stop-opacity:1;"
+         offset="0.8157447"
+         id="stop3601" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="1"
+         id="stop6285" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective5741" />
+    <inkscape:perspective
+       id="perspective5757"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6281"
+       id="radialGradient6287"
+       cx="340.00333"
+       cy="343.66583"
+       fx="340.00333"
+       fy="343.66583"
+       r="158.161"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6281"
+       id="radialGradient6297"
+       gradientUnits="userSpaceOnUse"
+       cx="340.00333"
+       cy="343.66583"
+       fx="340.00333"
+       fy="343.66583"
+       r="158.161" />
+    <inkscape:perspective
+       id="perspective6307"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.81910963"
+     inkscape:cx="372.04724"
+     inkscape:cy="526.18109"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1600"
+     inkscape:window-height="1127"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5738">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:0.1, 0.2;stroke-dashoffset:0"
+       id="rect5747"
+       width="678.78583"
+       height="678.78583"
+       x="26.858377"
+       y="130.53897"
+       rx="178.5739"
+       ry="187.11978"
+       inkscape:export-filename="/home/bruno/Desktop/magnifier.png"
+       inkscape:export-xdpi="3.9769578"
+       inkscape:export-ydpi="3.9769578" />
+    <rect
+       style="fill:#f2f2f2;fill-opacity:1;stroke:#000000;stroke-width:0.08153407000000000;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:0.08153407999999999, 0.16306815999999999;stroke-dashoffset:0"
+       id="rect5747-4"
+       width="556.7262"
+       height="550.17682"
+       x="87.888199"
+       y="197.37584"
+       rx="131.77995"
+       ry="131.08182"
+       inkscape:export-filename="/home/bruno/Desktop/magnifier.png"
+       inkscape:export-xdpi="3.9769578"
+       inkscape:export-ydpi="3.9769578" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.09386738;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:0.0938674, 0.18773479;stroke-dashoffset:0"
+       id="rect6291"
+       width="78.142548"
+       height="272.25317"
+       x="-110.59389"
+       y="608.17682"
+       rx="0"
+       ry="71.71949"
+       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,0,0)"
+       inkscape:export-filename="/home/bruno/Desktop/magnifier.png"
+       inkscape:export-xdpi="3.9769578"
+       inkscape:export-ydpi="3.9769578" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient6297);fill-opacity:1;stroke:#000000;stroke-width:0.1;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:0.1, 0.2;stroke-dashoffset:0"
+       id="path5745"
+       sodipodi:cx="340.00333"
+       sodipodi:cy="343.66583"
+       sodipodi:rx="158.0985"
+       sodipodi:ry="158.0985"
+       d="m 498.10182,343.66583 a 158.0985,158.0985 0 1 1 -316.19699,0 158.0985,158.0985 0 1 1 316.19699,0 z"
+       transform="matrix(0.70710678,-0.70710678,0.70710678,0.70710678,-192.43747,389.5481)"
+       inkscape:export-filename="/home/bruno/Desktop/magnifier.png"
+       inkscape:export-xdpi="3.9769578"
+       inkscape:export-ydpi="3.9769578" />
+  </g>
+</svg>

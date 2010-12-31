@@ -1,0 +1,104 @@
+<#import "corelayout.ftl.html" as layout><html>
+<@layout.head "Job Records (search results)">
+<style type="text/css" title="currentStyle">
+@import "${baseurl!}htdocs/jquery-datatables/css/demo_page.css";
+
+@import "${baseurl!}htdocs/jquery-datatables/css/demo_table.css";
+
+#message {
+    font-family: Arial,Helvetica,sans-serif;
+    position: fixed;
+    top :0px;
+    left: 0px;
+    width: 100%;
+    z-index: 105;
+    text-align: center;
+    font-weight: bold;
+    font-size: 100%;
+    color: white;
+    padding: 10px 0px 10px 0px;
+    background-color: #8A0808;
+}
+
+#message a {
+    color: white;
+}
+
+#message span {
+    text-align: center;
+    width: 95%;
+    float:left;
+}
+
+.close-message {
+    white-space: nowrap;
+    float: right;
+    margin-right: 10px;
+    color: #FFFFFF;
+    text-decoration: none;
+    border: 2px #FFFFFF solid;
+    padding-left: 3px;
+    padding-right: 3px
+}
+
+.close-message a {
+    color: #FFFFFF;
+}
+</style>
+<script type="text/javascript"
+	src="${baseurl!}htdocs/jquery-datatables/js/jquery.dataTables.min.js">/**/</script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#example').dataTable( {
+		"bProcessing": true,
+		"bServerSide": true,
+		"bFilter": false,
+		"sAjaxSource": window.location.href + '.json',
+		"fnServerData": function (sSource, aoData, fnCallback) {
+			$.ajax( {
+				"dataType": 'json', 
+				"type": "GET", 
+				"url": sSource, 
+				"data": aoData,
+				"success": function(json) {
+				   var rows = json['aaData'];
+				   for (var i in rows) {
+					   rows[i][0] = "<a href=\"../items/"+rows[i][0]+"\">"+rows[i][0]+"</a>";
+				   }
+				   fnCallback(json);
+			    }
+			} );
+		}
+	} );
+} );
+</script>
+</@layout.head>
+<@layout.body>
+<h1>Job Records - Search results</h1>
+<table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Owner</th>
+			<th>Creation Time</th>
+			<th>Start Time</th>
+			<th>End Time</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th>ID</th>
+			<th>Owner</th>
+			<th>Creation Time</th>
+			<th>Start Time</th>
+			<th>End Time</th>
+		</tr>
+	</tfoot>
+</table>
+<br />
+<br />
+<br />
+</@layout.body>
+</html>

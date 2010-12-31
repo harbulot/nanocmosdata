@@ -1,0 +1,51 @@
+<?xml version="1.0"  encoding="ISO-8859-1"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<Configure class="uk.ac.manchester.rcs.corypha.authn.AuthenticatorConfig">
+	<Get id="context" name="context" />
+	<New class="java.lang.String">
+		<Arg>testpassword1</Arg>
+		<Call id="pass1" name="toCharArray" />
+	</New>
+	<New class="java.lang.String">
+		<Arg>testpassword2</Arg>
+		<Call id="pass2" name="toCharArray" />
+	</New>
+
+	<New id="basicauthenticator"
+		class="uk.ac.manchester.rcs.corypha.authn.FallbackChallengeAuthenticator">
+		<Arg>
+			<Ref id="context" />
+		</Arg>
+		<Arg>
+			<Get class="org.restlet.data.ChallengeScheme" name="HTTP_BASIC" />
+		</Arg>
+		<Arg>Basic Test</Arg>
+		<Set name="verifier">
+			<New class="org.restlet.security.MapVerifier">
+				<Get name="localSecrets">
+					<Put name="testuser1">
+						<Ref id="pass1" />
+					</Put>
+					<Put name="testuser2">
+						<Ref id="pass2" />
+					</Put>
+				</Get>
+			</New>
+		</Set>
+	</New>
+
+	<Set name="authenticator">
+		<New
+			class="uk.ac.manchester.rcs.corypha.authn.ClientCertificateAuthenticator">
+			<Arg>
+				<Ref id="context" />
+			</Arg>
+			<Arg type="boolean">True</Arg>
+			<Call name="setNext">
+				<Arg>
+					<Ref id="basicauthenticator" />
+				</Arg>
+			</Call>
+		</New>
+	</Set>
+</Configure>

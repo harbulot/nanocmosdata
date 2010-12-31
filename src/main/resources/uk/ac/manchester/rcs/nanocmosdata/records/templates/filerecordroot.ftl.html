@@ -1,0 +1,197 @@
+<#import "corelayout.ftl.html" as layout><html>
+<@layout.head "File Records">
+<style type="text/css" title="currentStyle">
+@import "${baseurl!}htdocs/jquery-datatables/css/demo_page.css";
+
+@import "${baseurl!}htdocs/jquery-datatables/css/demo_table.css";
+
+#message {
+    font-family: Arial,Helvetica,sans-serif;
+    position: fixed;
+    top :0px;
+    left: 0px;
+    width: 100%;
+    z-index: 105;
+    text-align: center;
+    font-weight: bold;
+    font-size: 100%;
+    color: white;
+    padding: 10px 0px 10px 0px;
+    background-color: #8A0808;
+}
+
+#message a {
+    color: white;
+}
+
+#message span {
+    text-align: center;
+    width: 95%;
+    float:left;
+}
+
+.close-message {
+    white-space: nowrap;
+    float: right;
+    margin-right: 10px;
+    color: #FFFFFF;
+    text-decoration: none;
+    border: 2px #FFFFFF solid;
+    padding-left: 3px;
+    padding-right: 3px
+}
+
+.close-message a {
+    color: #FFFFFF;
+}
+</style>
+<script type="text/javascript"
+	src="${baseurl!}htdocs/jquery-datatables/js/jquery.dataTables.min.js">/**/</script>
+<script type="text/javascript">
+function notify_new_record(new_record_uri) {
+	$("#message-content").html("A new record was created at<br /><a href='" + new_record_uri + "'>" + new_record_uri +  "</a>.");
+    $("#message").fadeIn("slow");
+    $("#message a.close-message").click(function() {
+        $("#message").fadeOut("slow");
+        return false;
+    });
+}
+
+$(document).ready(function() {
+	$('#example').dataTable( {
+		"bProcessing": true,
+		"bServerSide": true,
+		"bFilter": false,
+		"sAjaxSource": 'items',
+		"fnServerData": function (sSource, aoData, fnCallback) {
+			$.ajax( {
+				"dataType": 'json', 
+				"type": "GET", 
+				"url": sSource, 
+				"data": aoData, 
+				"success": function(json) {
+				   var rows = json['aaData'];
+				   for (var i in rows) {
+					   rows[i][0] = "<a href=\"items/"+rows[i][0]+"\">"+rows[i][0]+"</a>";
+				   }
+				   fnCallback(json);
+			    }
+			} );
+		}
+	} );
+
+	<#if new_record_uri??>
+	$("#message").fadeIn("slow");
+    $("#message a.close-notify").click(function() {
+        $("#message").fadeOut("slow");
+        return false;
+    });
+	</#if>
+
+	$("#create-record").click(function () {
+		var newrec_location = $('#newrec_location').val();  
+		var newrec_type = $('#newrec_type').val();
+		$.ajax({
+			url: window.location.href,
+			type: "POST",
+			data: { 'newrec_location': newrec_location, 'newrec_type': newrec_type, 'form_submit': "create-record" },       
+			cache: false,
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('Accept','application/json');
+			},
+			success: function (data, textstatus, xhr) {
+				var contenttype = xhr.getResponseHeader('Content-Type');
+				var contenttypearr = contenttype.split(';');
+				if (contenttypearr[0] == 'application/json') {
+					$("#message span").html("A new record was created at:<br /><a href='"
+							+ data.new_record_uri + "'>" + data.new_record_uri + "</a>");
+					$("#message").fadeIn("slow");
+				    $("#message a.close-notify").click(function() {
+				        $("#message").fadeOut("slow");
+				        return false;
+				    });
+				} else {
+					alert('Content-Type of response not understood');
+				}
+            }
+        });
+        return false;
+	});
+} );
+</script>
+</@layout.head>
+<@layout.body>
+<div id="message" style="display: none;">
+    <span id="message-content">
+	<#if new_record_uri??>A new record was created at<br /><a href='${new_record_uri!}'>${new_record_uri?html!""}</a>.</#if>
+	</span>
+    <a href="#" class="close-message">X</a>
+</div>
+<h1>File Records</h1>
+<table cellpadding="0" cellspacing="0" border="0" class="display" id="example">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Owner</th>
+			<th>Type</th>
+			<th>Location</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th>ID</th>
+			<th>Owner</th>
+			<th>Type</th>
+			<th>Location</th>
+		</tr>
+	</tfoot>
+</table>
+<br />
+<br />
+<br />
+<div class="ui-widget">
+<div class="ui-widget-header">Search file records</div>
+<form method="post" class="ui-widget-content">
+<input type="hidden" name="form_submit" value="create-search" />
+<table>
+	<tr>
+		<th style="text-align: right;">Owner: </th>
+		<td><input type="text" name="owner" id="searchrec_owner" />
+	</tr>
+	<tr>
+		<th style="text-align: right;">Type: </th>
+		<td><input type="text" name="file_type" id="searchrec_type" />
+	</tr>
+	<tr>
+		<th style="text-align: right;">Location: </th>
+		<td><input type="text" name="file_location" id="searchrec_location" />
+	</tr>
+	<tr>
+		<td colspan="2"><input type="submit" id="create-search" value="Search file records" class="ui-state-default ui-corner-all" /></td>
+	</tr>
+</table>
+</form></div>
+<br />
+<br />
+<div class="ui-widget">
+<div class="ui-widget-header">Create a new file record</div>
+<form method="post" class="ui-widget-content">
+<input type="hidden" name="form_submit" value="create-record" />
+<table>
+	<tr>
+		<th style="text-align: right;">Type: </th>
+		<td><input type="text" name="newrec_type" id="newrec_type" />
+	</tr>
+	<tr>
+		<th style="text-align: right;">Location: </th>
+		<td><input type="text" name="newrec_location" id="newrec_location" />
+	</tr>
+	<tr>
+		<td colspan="2"><input type="button" id="create-record" value="Create file record" class="ui-state-default ui-corner-all" /></td>
+	</tr>
+</table>
+</form></div>
+</@layout.body>
+</html>
